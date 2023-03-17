@@ -11,7 +11,7 @@ print(sum(p.numel() for p in model.parameters())/1e6, 'M parameters')
 
 # Finetune: see Finetuning is no different than training, we just make sure to initialize from a pretrained model and train with a smaller learning ratemax_iters = 10_000
 # finetune at constant LR
-max_iters = 10_000
+max_iters = 15_000
 learning_rate = 5e-4
 decay_lr = False
 
@@ -55,10 +55,6 @@ def get_parems_batch(split):
     x, y = x.to(device), y.to(device)
     return x, y
 
-x,y = get_parems_batch('train')
-x.shape, y.shape
-
-
 def get_reverse_batch(split):
     # generate a small batch of data of inputs x and targets y
     data = train_data if split == 'train' else val_data
@@ -82,9 +78,6 @@ def get_reverse_batch(split):
     x, y = x.to(device), y.to(device)
     return x, y
 
-x, y= get_reverse_batch('train')
-x.shape, y.shape
-
 def get_batch(split):
     task0_x, task0_y = get_main_task_batch(split) # не забываем про основную задачу
     task1_x, task1_y = get_reverse_batch(split)   # учим на переворот
@@ -99,12 +92,14 @@ def get_batch(split):
                 task2_y], dim=0) 
 
 
-for iter in range(max_iters):
+t = tqdm(range(max_iters))
+for iter in t:
 
     # every once in a while evaluate the loss on train and val sets
     if iter % eval_interval == 0 or iter == max_iters - 1:
         losses = estimate_loss()
-        print(f"step {iter}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
+        t.set_postfix(train_loss=float(losses['train']), val_loss=float(losses['val']))
+        # print(f"step {iter}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
 
     # sample a batch of data
     xb, yb = get_batch('train')

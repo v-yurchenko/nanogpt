@@ -1,0 +1,7 @@
+#!/bin/bash
+
+python prepare.py
+clear
+python train.py
+python finetune.py
+python inference.py
