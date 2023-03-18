@@ -12,8 +12,8 @@ print(sum(p.numel() for p in model.parameters())/1e6, 'M parameters')
 
 # Finetune: see Finetuning is no different than training, we just make sure to initialize from a pretrained model and train with a smaller learning ratemax_iters = 10_000
 # finetune at constant LR
-max_iters = 15_000
-learning_rate = 5e-4
+max_iters = 25_000
+learning_rate = 1e-4
 decay_lr = False
 
 # create a PyTorch optimizer
@@ -44,7 +44,8 @@ def get_parems_batch(split):
     for i in ix:
         # divide it randomly - may not from 5????
         j = torch.randint(5, len(data[i]), (1,))
-        prompt = data[i][:j]+'ПП='+data[i][j:]
+        prompt = 'ПП='+data[i]
+        # prompt = data[i][:j]+'ПП='+data[i][j:]
         prompt = prompt[:block_size]+''.join([' ']*(block_size-len(prompt))) + ' '
         prompt_x = prompt[:block_size]
         prompt_y = prompt[1:block_size+1]
@@ -60,12 +61,13 @@ def get_reverse_batch(split):
     # generate a small batch of data of inputs x and targets y
     data = train_data if split == 'train' else val_data
     ix = torch.randint(len(data) - block_size, (64, ))
-    jx = torch.randint(1,  block_size//2, (64,))
+    jx = torch.randint(1,  block_size//2-2, (64,))
     x = []
     y = []
     for i,j in zip(ix, jx):
         sent = decode(data[i:i+j].tolist())
-        prompt = (sent+"ПФ="+sent[::-1])
+        prompt = "ПФ="+sent+" "+sent[::-1] 
+        # prompt = sent+"ПФ="+sent[::-1]
         prompt = prompt[:block_size]+''.join([' ']*(block_size-len(prompt))) + ' '
         prompt_x = prompt[:block_size]
         prompt_y = prompt[1:block_size+1]
