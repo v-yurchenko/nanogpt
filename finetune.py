@@ -12,8 +12,8 @@ print(sum(p.numel() for p in model.parameters())/1e6, 'M parameters')
 
 # Finetune: see Finetuning is no different than training, we just make sure to initialize from a pretrained model and train with a smaller learning ratemax_iters = 10_000
 # finetune at constant LR
-max_iters = 25_000
-learning_rate = 1e-4
+max_iters = 20_000
+learning_rate = 5e-4
 decay_lr = False
 
 # create a PyTorch optimizer
