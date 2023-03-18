@@ -178,6 +178,9 @@ class BigramLanguageModel(nn.Module):
 def inference(sent, max_new_tokens=150):
     context = torch.cat([torch.tensor(encode(sent), dtype=torch.long)], dim=0).reshape(1,-1).to(device)# torch.zeroes((1,1), dtype=torch.long, device=device)
     output = decode(model.generate(context, max_new_tokens=max_new_tokens, hard_seq = True)[0].tolist())
+    stop_context_pos = output.find('     ')
+    if stop_context_pos != -1:
+        output = output[:stop_context_pos]
     return output
 
 train_pt_file = f'data/{corpus_type}_train.pt'

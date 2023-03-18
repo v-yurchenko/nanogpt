@@ -13,7 +13,8 @@ print(sum(p.numel() for p in model.parameters())/1e6, 'M parameters')
 # create a PyTorch optimizer
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
 
-print("start training, total steps = ", max_iters)
+print("Training language model")
+print("Start training, total steps = ", max_iters)
 # training loop
 t = tqdm(range(max_iters))
 for iter in t:
@@ -35,7 +36,7 @@ for iter in t:
 if not os.path.exists('model'):
     os.system("mkdir model/")
     
-print("saving trained model to: ", model_pt_file)
+print("Saving trained model to: ", model_pt_file)
 torch.save(model.state_dict(), model_pt_file)
 
 print("Sample generation = ", inference('завещание', 2000))

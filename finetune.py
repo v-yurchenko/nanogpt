@@ -2,6 +2,7 @@ import os
 import pickle
 import numpy as np
 import torch
+from tqdm import tqdm
 
 from gpt_model import *
 
@@ -91,7 +92,8 @@ def get_batch(split):
                 task1_y, 
                 task2_y], dim=0) 
 
-
+print("Finetuning language model")
+print("Start training, total steps = ", max_iters)
 t = tqdm(range(max_iters))
 for iter in t:
 
@@ -110,5 +112,5 @@ for iter in t:
     loss.backward()
     optimizer.step()
 
-print("saving finetune model to: ",model_finetuned_pt_file)
+print("Saving finetune model to: ",model_finetuned_pt_file)
 torch.save(model.state_dict(), model_finetuned_pt_file)

@@ -8,7 +8,7 @@ import pickle
 if not os.path.exists('data'):
     os.system("mkdir data/")
 if not os.path.exists('data/data.tar.gz'):
-    os.system("wget --no-check-certificate -O data/data.tar.gz -r https://ipfs.sweb.ru/ipfs/QmSwzBsup91QiJZQS1xuSEq6NunJukvXLGTms17zgAm4Th/data.tar.gz")
+    os.system("wget --no-check-certificate -O data/data.tar.gz -r https://github.com/v-yurchenko/nanogpt/blob/main/data/data.tar.gz?raw=true") #https://ipfs.sweb.ru/ipfs/QmSwzBsup91QiJZQS1xuSEq6NunJukvXLGTms17zgAm4Th/data.tar.gz")
 if os.path.exists('data/data.tar.gz'):
     os.system("tar -xvf data/data.tar.gz --directory=data/ > /dev/null")
     os.system("rm data/data.tar.gz") 
